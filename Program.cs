@@ -89,7 +89,7 @@ namespace ImportadorMovimientos
                     continue;
                 }
 
-                filasValidas++;
+                
 
                 Console.WriteLine(
                     $"Línea {numeroLinea}: cliente válido."
@@ -109,6 +109,50 @@ namespace ImportadorMovimientos
                     continue;
                 }
                 Console.WriteLine($"Línea {numeroLinea}: tipo válido.");
+
+                //valido fecha
+                if (!DateOnly.TryParse(datos[1], out DateOnly fecha))
+                {
+                    filasRechazadas++;
+
+                    Console.WriteLine(
+                        $"Línea {numeroLinea}: fecha inválida."
+                    );
+
+                    continue;
+                }
+
+                Console.WriteLine(
+                    $"Línea {numeroLinea}: fecha válida."
+                );
+
+                //valido importe
+                if (!decimal.TryParse(datos[3], out decimal importe))
+                {
+                    filasRechazadas++;
+
+                    Console.WriteLine(
+                        $"Línea {numeroLinea}: importe inválido."
+                    );
+
+                    continue;
+                }
+
+                //valido importe < 0
+                if (importe <= 0)
+                {
+                    filasRechazadas++;
+
+                    Console.WriteLine(
+                        $"Línea {numeroLinea}: importe debe ser mayor que cero."
+                    );
+
+                    continue;
+                }
+
+                filasValidas++;
+                Console.WriteLine($"Línea {numeroLinea}: fila válida.");
+
 
             }
 
