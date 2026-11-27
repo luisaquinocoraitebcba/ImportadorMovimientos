@@ -23,6 +23,14 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include=".cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>.gitignore</DependentUpon>
+    </None>
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.9" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.9" />
@@ -36,6 +44,21 @@
 
 	<ItemGroup>
 	  <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="movimientos.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>movimientos.csv</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update=".gitignore">
+	    <Generator>TextTemplatingFileGenerator</Generator>
+	    <LastGenOutput>.cs</LastGenOutput>
+	  </None>
 	</ItemGroup>
 
 </Project>
