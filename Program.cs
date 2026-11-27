@@ -1,4 +1,5 @@
 ﻿using ImportadorMovimientos.Data;
+using ImportadorMovimientos.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -152,6 +153,26 @@ namespace ImportadorMovimientos
 
                 filasValidas++;
                 Console.WriteLine($"Línea {numeroLinea}: fila válida.");
+                
+                //para insertar movimiento
+                var movimiento = new Movimiento
+                {
+                    ClienteId = cliente.Id,
+                    TipoMovimientoId = tipoMovimiento.Id,
+                    Fecha = fecha,
+                    Importe = importe
+                };
+
+                contexto.Movimientos.Add(movimiento);
+
+                contexto.SaveChanges();
+
+                filasValidas++;
+
+                Console.WriteLine(
+                    $"Línea {numeroLinea}: movimiento guardado."
+                );
+
 
 
             }
