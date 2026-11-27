@@ -151,9 +151,7 @@ namespace ImportadorMovimientos
                     continue;
                 }
 
-                filasValidas++;
-                Console.WriteLine($"Línea {numeroLinea}: fila válida.");
-                
+             
                 //para insertar movimiento
                 var movimiento = new Movimiento
                 {
