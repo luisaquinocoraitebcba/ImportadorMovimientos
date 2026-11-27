@@ -2,6 +2,7 @@
 using ImportadorMovimientos.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Globalization;
 
 namespace ImportadorMovimientos
 {
@@ -128,7 +129,7 @@ namespace ImportadorMovimientos
                 );
 
                 //valido importe
-                if (!decimal.TryParse(datos[3], out decimal importe))
+                if (!decimal.TryParse( datos[3],NumberStyles.Any, CultureInfo.InvariantCulture,out decimal importe))
                 {
                     filasRechazadas++;
 
@@ -138,6 +139,7 @@ namespace ImportadorMovimientos
 
                     continue;
                 }
+
 
                 //valido importe < 0
                 if (importe <= 0)
@@ -179,6 +181,64 @@ namespace ImportadorMovimientos
             Console.WriteLine("----------------------");
             Console.WriteLine($"Filas válidas: {filasValidas}");
             Console.WriteLine($"Filas rechazadas: {filasRechazadas}");
+
+            Console.WriteLine();
+            Console.WriteLine("REPORTE FINAL");
+            Console.WriteLine("=============");
+            var clientes = contexto.Clientes
+                .Include(c => c.Movimientos)
+                .ThenInclude(m => m.TipoMovimiento)
+                .ToList();
+
+            foreach (var cliente in clientes)
+            {
+                if (!cliente.Movimientos.Any())
+                {
+                    continue;
+                }
+
+                Console.WriteLine();
+                Console.WriteLine("----------------------");
+
+                Console.WriteLine($"DNI: {cliente.Dni}");
+                Console.WriteLine($"Nombre: {cliente.Nombre}");
+
+                int cantidadMovimientos =
+                    cliente.Movimientos.Count();
+
+                decimal ingresos =
+                    cliente.Movimientos
+                        .Where(m =>
+                            m.TipoMovimiento.Codigo == "INGRESO")
+                        .Sum(m => m.Importe);
+
+                decimal egresos =
+                    cliente.Movimientos
+                        .Where(m =>
+                            m.TipoMovimiento.Codigo == "EGRESO")
+                        .Sum(m => m.Importe);
+
+                decimal saldoNeto =
+                    ingresos - egresos;
+
+                Console.WriteLine(
+                    $"Cantidad movimientos: {cantidadMovimientos}"
+                );
+
+                Console.WriteLine(
+                    $"Ingresos: {ingresos}"
+                );
+
+                Console.WriteLine(
+                    $"Egresos: {egresos}"
+                );
+
+                Console.WriteLine(
+                    $"Saldo Neto: {saldoNeto}"
+                );
+            }
+
+
 
             Console.ReadKey();
         }
